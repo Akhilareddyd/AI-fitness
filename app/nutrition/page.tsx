@@ -466,6 +466,8 @@ function TodaySummaryTab() {
 
   const calorieTarget = isWorkoutDay ? 1700 : 1450
   const proteinTarget = 115
+  const carbsTarget = 160
+  const fatTarget = 55
   const totalCalories = logs.reduce((s, l) => s + l.estimated_calories, 0)
   const totalProtein = logs.reduce((s, l) => s + l.estimated_protein_g, 0)
   const totalCarbs = logs.reduce((s, l) => s + l.estimated_carbs_g, 0)
@@ -521,22 +523,45 @@ function TodaySummaryTab() {
         </div>
       </div>
 
-      {/* Protein summary */}
-      <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4 space-y-3">
-        <div className="flex justify-between items-baseline">
-          <div>
-            <span className="text-xl font-bold text-violet-700">{Math.round(totalProtein)}g</span>
-            <span className="text-zinc-400 text-sm ml-1">protein / {proteinTarget}g target</span>
+      {/* Macros summary */}
+      <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4 space-y-4">
+        <h3 className="text-sm font-semibold text-zinc-700">Macros</h3>
+
+        {/* Protein */}
+        <div className="space-y-1.5">
+          <div className="flex justify-between items-baseline">
+            <span className="text-xs font-medium text-violet-700">Protein</span>
+            <span className="text-xs text-zinc-500">
+              <span className="font-semibold text-violet-700">{Math.round(totalProtein)}g</span>
+              {' '}/ {proteinTarget}g
+            </span>
           </div>
-          <span className="text-xs text-zinc-500">
-            {Math.round(totalCarbs)}g carbs · {Math.round(totalFat)}g fat
-          </span>
+          <ProgressBar value={totalProtein} max={proteinTarget} color="bg-violet-500" />
         </div>
-        <ProgressBar
-          value={totalProtein}
-          max={proteinTarget}
-          color="bg-blue-500"
-        />
+
+        {/* Carbs */}
+        <div className="space-y-1.5">
+          <div className="flex justify-between items-baseline">
+            <span className="text-xs font-medium text-amber-700">Carbs</span>
+            <span className="text-xs text-zinc-500">
+              <span className="font-semibold text-amber-700">{Math.round(totalCarbs)}g</span>
+              {' '}/ {carbsTarget}g
+            </span>
+          </div>
+          <ProgressBar value={totalCarbs} max={carbsTarget} color="bg-amber-400" />
+        </div>
+
+        {/* Fat */}
+        <div className="space-y-1.5">
+          <div className="flex justify-between items-baseline">
+            <span className="text-xs font-medium text-rose-600">Fat</span>
+            <span className="text-xs text-zinc-500">
+              <span className="font-semibold text-rose-600">{Math.round(totalFat)}g</span>
+              {' '}/ {fatTarget}g
+            </span>
+          </div>
+          <ProgressBar value={totalFat} max={fatTarget} color="bg-rose-400" />
+        </div>
       </div>
 
       {/* Meal timeline */}
