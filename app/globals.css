@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FFFFFF;
+  --card:       #FFFFFF;
+  --border:     #F3F4F6;
+  --foreground: #0F172A;
+  --muted:      #64748B;
+  --dim:        #94A3B8;
+  --primary:    #6D28D9;
+  --secondary:  #DC2626;
+  --accent:     #2563EB;
+  --warning:    #B45309;
+  --info:       #2563EB;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #F8FAFC; }
+::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+
+/* Prose */
+.prose-dark { color: #64748B; line-height: 1.7; }
+.prose-dark strong { color: #0F172A; }
+
+/* Streaming cursor */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.streaming-cursor::after {
+  content: '▋';
+  display: inline;
+  margin-left: 2px;
+  animation: cursor-blink 0.8s infinite;
+  color: var(--primary);
+}
+
+/* Progress bar fill animation */
+@keyframes progress-fill {
+  from { width: 0; }
+}
+.progress-animate {
+  animation: progress-fill 0.6s ease-out;
+}
+
+/* Ring stroke animation */
+@keyframes ring-fill {
+  from { stroke-dashoffset: var(--circ); }
+}
+.ring-animate {
+  animation: ring-fill 0.8s ease-out;
+}
+
+/* Card hover lift */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+}
+
+/* ── Light mode: remap zinc dark-theme classes ─────────────────────────── */
+.bg-zinc-950 { background-color: #F8FAFC !important; }
+.bg-zinc-900 { background-color: #FFFFFF !important; }
+.bg-zinc-800 { background-color: #F8FAFC !important; }
+.bg-zinc-700 { background-color: #F1F5F9 !important; }
+
+.border-zinc-800 { border-color: #E2E8F0 !important; }
+.border-zinc-700 { border-color: #E2E8F0 !important; }
+
+.text-zinc-100 { color: #0F172A !important; }
+.text-zinc-200 { color: #1E293B !important; }
+.text-zinc-300 { color: #334155 !important; }
+.text-zinc-400 { color: #64748B !important; }
+.text-zinc-500 { color: #94A3B8 !important; }
+.text-zinc-600 { color: #94A3B8 !important; }
+
+.placeholder-zinc-500::placeholder { color: #94A3B8 !important; }
+
+/* Hover state remaps */
+.hover\:text-zinc-100:hover { color: #0F172A !important; }
+.hover\:text-zinc-200:hover { color: #1E293B !important; }
+.hover\:bg-zinc-800:hover   { background-color: #F8FAFC !important; }
+.hover\:bg-zinc-700:hover   { background-color: #F1F5F9 !important; }
+.hover\:bg-zinc-600:hover   { background-color: #E2E8F0 !important; }
+.hover\:border-zinc-700:hover { border-color: #CBD5E1 !important; }
+
+/* Group-hover remaps */
+.group:hover .group-hover\:text-zinc-400 { color: #64748B !important; }
+
+/* Accent text: darkened variants for white background readability */
+.text-emerald-400 { color: #059669 !important; }
+.text-purple-400  { color: #7c3aed !important; }
+.text-orange-400  { color: #c2410c !important; }
+.text-blue-400    { color: #1d4ed8 !important; }
+.text-blue-300    { color: #1d4ed8 !important; }
+.text-yellow-300  { color: #92400e !important; }
+.text-amber-300   { color: #92400e !important; }
+.text-purple-300  { color: #7c3aed !important; }
