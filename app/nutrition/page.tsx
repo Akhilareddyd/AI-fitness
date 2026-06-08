@@ -14,6 +14,7 @@ import {
   Clock,
   Bot,
   ExternalLink,
+  Trash2,
 } from 'lucide-react'
 import Link from 'next/link'
 import {
@@ -166,14 +167,14 @@ function LogMealTab() {
         date,
         meal_type: mealType,
         description: inputMode === 'text' ? description : 'Photo meal',
-        image_url: imagePreview,
+        image_url: null,
         estimated_calories: avgCalories,
         estimated_protein_g: estimate.protein_g,
         estimated_carbs_g: estimate.carbs_g,
         estimated_fat_g: estimate.fat_g,
         claude_breakdown: estimate.breakdown,
       })
-      if (dbErr) throw dbErr
+      if (dbErr) throw new Error(dbErr.message || dbErr.details || JSON.stringify(dbErr))
       setSaved(true)
       setEstimate(null)
       setDescription('')
@@ -434,6 +435,8 @@ function TodaySummaryTab() {
   const now = new Date()
   const hour = now.getHours()
 
+  const [deleting, setDeleting] = useState<string | null>(null)
+
   const load = useCallback(async () => {
     setLoading(true)
     const todayStr = today()
@@ -449,6 +452,13 @@ function TodaySummaryTab() {
     setIsWorkoutDay((workoutData?.length ?? 0) > 0)
     setLoading(false)
   }, [])
+
+  const handleDelete = async (id: string) => {
+    setDeleting(id)
+    await supabase.from('nutrition_logs').delete().eq('id', id)
+    setDeleting(null)
+    load()
+  }
 
   useEffect(() => {
     load()
@@ -558,9 +568,19 @@ function TodaySummaryTab() {
                   </span>
                 </div>
                 {mealLogs.map((log) => (
-                  <p key={log.id} className="text-xs text-zinc-500 ml-5">
-                    {log.description}
-                  </p>
+                  <div key={log.id} className="flex items-center gap-2 ml-5 group mt-1">
+                    <p className="text-xs text-zinc-500 flex-1">{log.description}</p>
+                    <button
+                      onClick={() => handleDelete(log.id)}
+                      disabled={deleting === log.id}
+                      className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-lg hover:bg-red-50 text-zinc-400 hover:text-red-500 disabled:opacity-50"
+                      title="Delete this entry"
+                    >
+                      {deleting === log.id
+                        ? <Loader2 className="w-3 h-3 animate-spin" />
+                        : <Trash2 className="w-3 h-3" />}
+                    </button>
+                  </div>
                 ))}
               </div>
             )
