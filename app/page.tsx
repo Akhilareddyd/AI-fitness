@@ -24,6 +24,10 @@ import { supabase } from '@/lib/supabase'
 
 const DAY_NAMES = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
 
+function localDate(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
 const DAILY_PLANS: Record<string, { name: string; duration: string; burned: string; emoji: string }> = {
   monday:    { name: 'Glutes & Hamstrings', duration: '60 min', burned: '~380 kcal', emoji: '🍑' },
   tuesday:   { name: 'Upper Body',          duration: '55 min', burned: '~320 kcal', emoji: '💪' },
@@ -94,7 +98,7 @@ const CARD = {
 export default function Dashboard() {
   const now     = new Date()
   const dayName = DAY_NAMES[now.getDay()]
-  const todayStr = now.toISOString().split('T')[0]
+  const todayStr = localDate(now)
   const hour    = now.getHours()
   const greeting =
     hour < 5  ? 'Good night'
@@ -122,11 +126,11 @@ export default function Dashboard() {
       supabase
         .from('nutrition_logs')
         .select('date, estimated_calories, estimated_protein_g, estimated_carbs_g, estimated_fat_g')
-        .gte('date', sevenAgo.toISOString().split('T')[0]),
+        .gte('date', localDate(sevenAgo)),
       supabase
         .from('exercise_logs')
         .select('date')
-        .gte('date', thirtyAgo.toISOString().split('T')[0]),
+        .gte('date', localDate(thirtyAgo)),
       supabase
         .from('measurements')
         .select('weight_kg')
@@ -153,7 +157,7 @@ export default function Dashboard() {
       const week = []
       for (let i = 6; i >= 0; i--) {
         const d = new Date(); d.setDate(d.getDate() - i)
-        const ds = d.toISOString().split('T')[0]
+        const ds = localDate(d)
         week.push({ day: d.toLocaleDateString('en', { weekday: 'short' }), cal: byDate[ds] || 0 })
       }
       setWeekData(week)
@@ -170,7 +174,7 @@ export default function Dashboard() {
       for (let i = 0; i < 30; i++) {
         const dow = d.getDay()
         if (dow !== 0 && dow !== 6) {
-          if (!s.has(d.toISOString().split('T')[0])) break
+          if (!s.has(localDate(d))) break
           count++
         }
         d.setDate(d.getDate() - 1)
@@ -203,7 +207,7 @@ export default function Dashboard() {
 
   const activityDays = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(); d.setDate(d.getDate() - (6 - i))
-    const ds = d.toISOString().split('T')[0]
+    const ds = localDate(d)
     return {
       label:    d.toLocaleDateString('en', { weekday: 'short' }),
       date:     ds,

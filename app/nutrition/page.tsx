@@ -51,8 +51,12 @@ const MEAL_LABELS: Record<MealType, string> = {
   snack: 'Snack',
 }
 
+function localDateStr(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
 function today() {
-  return new Date().toISOString().split('T')[0]
+  return localDateStr(new Date())
 }
 
 function MacroPill({
@@ -634,7 +638,7 @@ function BudgetReviewTab() {
     for (let i = 6; i >= 0; i--) {
       const d = new Date(now)
       d.setDate(d.getDate() - i)
-      const dateStr = d.toISOString().split('T')[0]
+      const dateStr = localDateStr(d)
       days.push({
         date: dateStr,
         day: d.toLocaleDateString('en', { weekday: 'short' }),
